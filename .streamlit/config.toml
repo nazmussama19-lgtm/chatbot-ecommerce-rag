@@ -1,0 +1,27 @@
+[client]
+toolbarMode = "minimal"
+
+[theme]
+font = "DM Sans:https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap"
+headingFont = "Instrument Serif:https://fonts.googleapis.com/css2?family=Instrument+Serif&display=swap"
+headingFontWeights = 400
+baseFontSize = 15
+baseRadius = "0.75rem"
+buttonRadius = "full"
+showWidgetBorder = true
+
+[theme.light]
+primaryColor = "#C4532F"
+backgroundColor = "#FAF9F6"
+secondaryBackgroundColor = "#F1EEE8"
+textColor = "#1C1B19"
+borderColor = "#E4DFD6"
+linkColor = "#B0482A"
+
+[theme.dark]
+primaryColor = "#E27352"
+backgroundColor = "#151413"
+secondaryBackgroundColor = "#211F1D"
+textColor = "#EEEBE5"
+borderColor = "#34312D"
+linkColor = "#EC8A6C"
