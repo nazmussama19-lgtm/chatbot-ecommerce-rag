@@ -1,3 +1,4 @@
+import hashlib
 from pathlib import Path
 
 import chromadb
@@ -22,11 +23,19 @@ def get_collection():
 
 
 def ingest_faq_data(path):
+    # L'empreinte du CSV est stockée avec la collection : si la FAQ change pendant que
+    # l'appli tourne (redéploiement à chaud), la collection est reconstruite
+    content_hash = hashlib.md5(Path(path).read_bytes()).hexdigest()
     collection = get_collection()
-    if collection.count() > 0:
-        print(f"Collection: {collection_name_faq} already exists")
+    if collection.count() > 0 and (collection.metadata or {}).get("hash") == content_hash:
         return
     print("Ingesting FAQ data into Chromadb...")
+    chroma_client.delete_collection(collection_name_faq)
+    collection = chroma_client.create_collection(
+        name=collection_name_faq,
+        embedding_function=ef,
+        metadata={"hash": content_hash},
+    )
     df = pd.read_csv(path)
     collection.add(
         documents=df["question"].to_list(),

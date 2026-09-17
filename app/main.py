@@ -1,3 +1,4 @@
+import hashlib
 from pathlib import Path
 
 import groq
@@ -55,9 +56,16 @@ st.html("""
 
 
 @st.cache_resource(show_spinner="Chargement des modèles (premier lancement uniquement)…")
-def load():
+def load(version):
+    # `version` change quand la FAQ ou les exemples du routeur changent :
+    # le cache est alors invalidé, même si Streamlit Cloud recharge le code à chaud
     ingest_faq_data(faqs_path)
     return build_router()
+
+
+def data_version():
+    files = [faqs_path, Path(__file__).parent / "router.py"]
+    return hashlib.md5(b"".join(f.read_bytes() for f in files)).hexdigest()
 
 
 def ask(router, query):
@@ -88,7 +96,7 @@ if not has_api_key():
     st.error("La clé GROQ_API_KEY est absente. Ajoutez-la dans les secrets de l'appli (ou dans un fichier .env en local).")
     st.stop()
 
-router = load()
+router = load(data_version())
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
