@@ -1,4 +1,5 @@
 import os
+import re
 
 from dotenv import load_dotenv
 from groq import Groq
@@ -45,4 +46,11 @@ def chat(messages, temperature=0.2, max_tokens=2048):
         max_tokens=max_tokens,
         extra_body=reasoning_params(model),
     )
-    return completion.choices[0].message.content or ""
+    return clean_output(completion.choices[0].message.content or "")
+
+
+def clean_output(text):
+    # gpt-oss laisse parfois un reste de balise de fin de message (« </assistant », « <|end|> »)
+    text = re.sub(r"<\|[a-z_]+\|>", "", text)
+    text = re.sub(r"\s*</?assistant\b[^>]*>?\s*$", "", text, flags=re.IGNORECASE)
+    return text.strip()

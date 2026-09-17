@@ -46,6 +46,9 @@ st.html("""
     text-align: center; font-size: 0.72rem; line-height: 1.5; opacity: 0.4;
     max-width: 28rem; margin: 0.4rem auto 0;
 }
+.stButton [data-testid="stMarkdownContainer"], .stButton [data-testid="stMarkdownContainer"] p {
+    white-space: normal; overflow: visible; text-overflow: clip;
+}
 .topbar-title { font-family: "Instrument Serif", serif; font-size: 1.6rem; line-height: 2.4rem; }
 </style>
 """)
@@ -63,7 +66,8 @@ def ask(router, query):
         if route == "faq":
             return faq_chain(query)
         if route == "sql":
-            return sql_chain(query)
+            # sql_chain renvoie None quand la question ne porte pas sur le catalogue
+            return sql_chain(query) or faq_chain(query)
         return CHITCHAT_ANSWER
     except groq.RateLimitError:
         return "Trop de demandes en ce moment. Réessayez dans une minute."

@@ -2,7 +2,7 @@
 
 Un assistant de boutique en ligne qui répond en français. Il repère ce que veut le client, puis va chercher la réponse au bon endroit : la FAQ de la boutique, ou un catalogue de 903 chaussures de sport interrogé en SQL.
 
-**[→ Tester l'application](https://LIEN-A-COMPLETER.streamlit.app)**
+**[→ Tester l'application](https://chatbot-flipkart.streamlit.app)**
 
 ![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-1.64-FF4B4B?logo=streamlit&logoColor=white)
@@ -28,7 +28,9 @@ Chaque message est classé dans une intention, puis traité par la chaîne corre
 
 ## Choix techniques
 
-**Un routeur sémantique, avec le LLM en arbitre.** Le message est encodé avec all-MiniLM-L6-v2 et comparé par similarité cosinus à des phrases d'exemple de chaque intention. Ce routage ne coûte aucun appel au LLM, mais le modèle a surtout été entraîné sur de l'anglais. Sur 28 phrases en français absentes des exemples, 4 étaient mal classées, et 3 d'entre elles avaient un écart de score inférieur à 0,05 avec la deuxième intention. Sous ce seuil, c'est donc le LLM qui tranche.
+**Un routeur sémantique, avec le LLM en arbitre.** Le message est encodé avec all-MiniLM-L6-v2 et comparé par similarité cosinus à des phrases d'exemple de chaque intention. Ce routage ne coûte aucun appel au LLM, mais le modèle a surtout été entraîné sur de l'anglais. Sur 31 phrases en français absentes des exemples, les erreurs avaient toutes un écart de moins de 0,10 avec la deuxième intention. Sous ce seuil, c'est donc le LLM qui tranche : 12 phrases sur 31 lui ont été envoyées, et aucune erreur n'est passée à travers.
+
+Dernier filet de sécurité : si une question qui n'a rien à voir avec le catalogue arrive quand même dans la chaîne SQL (*Est-ce que je peux payer avec PayPal ?*), le LLM répond `NONE` au lieu d'écrire une requête, et la question repart vers la FAQ.
 
 **Pas de PyTorch.** L'embedding tourne en ONNX via ChromaDB. L'installation reste légère : 6 dépendances, contre plusieurs Go avec `sentence-transformers`.
 

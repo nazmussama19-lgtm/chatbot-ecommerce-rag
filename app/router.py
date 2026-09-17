@@ -76,7 +76,7 @@ class SemanticRouter:
     obtiennent des scores trop proches, le LLM tranche.
     """
 
-    def __init__(self, routes, margin=0.05, fallback=classify_with_llm):
+    def __init__(self, routes, margin=0.10, fallback=classify_with_llm):
         self.margin = margin
         self.fallback = fallback
         self.route_names = list(routes)

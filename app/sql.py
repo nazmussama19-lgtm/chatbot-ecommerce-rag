@@ -35,6 +35,7 @@ Create a single SQL query for the question provided.
 The question may be in French, but product titles and brands in the database are in English: translate keywords (e.g. "chaussures de course" -> "Running") before using them in LIKE conditions.
 The query should have all the fields in SELECT clause (i.e. SELECT *)
 Unless the question asks for a specific number of products, add LIMIT 10 to the query.
+If the question is not about products of the catalog (for example store policies, payment, delivery or returns), do not write a query: answer exactly <SQL>NONE</SQL>.
 
 Just the SQL query is needed, nothing more. Always provide the SQL in between the <SQL></SQL> tags."""
 
@@ -121,6 +122,8 @@ def sql_chain(question):
         return "Je n'ai pas réussi à transformer votre demande en recherche. Pouvez-vous la reformuler ?"
 
     print(matches[0].strip())
+    if matches[0].strip().upper() == "NONE":
+        return None
 
     try:
         response = run_query(matches[0])
@@ -132,9 +135,12 @@ def sql_chain(question):
     if response.empty:
         return "Aucun produit ne correspond à votre recherche."
 
-    response = response.drop(columns=["index"], errors="ignore").head(MAX_ROWS)
+    response = response.drop(columns=["index"], errors="ignore")
     if "product_link" in response.columns:
+        # Le scraping contient quelques fiches en double : même produit, même lien
         response["product_link"] = response["product_link"].map(short_link)
+        response = response.drop_duplicates(subset="product_link")
+    response = response.head(MAX_ROWS)
 
     # Liste de produits : mise en forme directe, sans repasser par le LLM
     if PRODUCT_COLUMNS.issubset(response.columns):
