@@ -7,7 +7,7 @@ Un assistant de boutique en ligne qui répond en français. Il repère ce que ve
 ![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-1.64-FF4B4B?logo=streamlit&logoColor=white)
 ![ChromaDB](https://img.shields.io/badge/ChromaDB-1.5-C4532F)
-![Llama 3.3](https://img.shields.io/badge/Llama_3.3-Groq-F55036)
+![GPT-OSS 120B](https://img.shields.io/badge/GPT--OSS_120B-Groq-F55036)
 ![SQLite](https://img.shields.io/badge/SQLite-003B57?logo=sqlite&logoColor=white)
 
 ![Aperçu de l'application](app/resources/apercu.png)
@@ -66,7 +66,7 @@ Fichier principal `app/main.py`, Python 3.11 ou 3.12, et dans *Advanced settings
 
 ```toml
 GROQ_API_KEY = "gsk_..."
-GROQ_MODEL = "llama-3.3-70b-versatile"
+GROQ_MODEL = "openai/gpt-oss-120b"
 ```
 
 ## Structure

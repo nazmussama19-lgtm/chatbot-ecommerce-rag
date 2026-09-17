@@ -106,7 +106,7 @@ if not st.session_state.messages and not query:
             question, icon=icon, width="stretch", on_click=send_suggestion, args=(question,)
         )
     st.html(
-        '<p class="stack">Llama 3.3 via Groq · ChromaDB · SQLite</p>'
+        '<p class="stack">GPT-OSS 120B via Groq · ChromaDB · SQLite</p>'
         '<p class="notice">Projet de démonstration sans but commercial, sans lien avec Flipkart. '
         "Catalogue issu de Flipkart (site marchand indien) en mai 2024, prix convertis en euros "
         "au taux BCE du 20 mai 2024.</p>"

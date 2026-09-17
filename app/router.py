@@ -64,7 +64,7 @@ def classify_with_llm(query, candidates):
         f"Classify the user message into one of these intents:\n{ROUTE_DESCRIPTIONS}\n\n"
         f"Message: {query}\n\nAnswer with a single word: faq, sql or chitchat."
     )
-    answer = chat([{"role": "user", "content": prompt}], temperature=0, max_tokens=5).lower()
+    answer = chat([{"role": "user", "content": prompt}], temperature=0, max_tokens=300).lower()
     found = re.findall(r"faq|sql|chitchat", answer)
     return found[0] if found else candidates[0]
 

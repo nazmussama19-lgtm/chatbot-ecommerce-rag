@@ -52,6 +52,8 @@ def generate_sql_query(question):
 
 
 def run_query(query):
+    # Certains modèles entourent le SQL de balises Markdown (```sql ... ```)
+    query = re.sub(r"^```(?:sql)?|```$", "", query.strip(), flags=re.IGNORECASE)
     query = query.strip().rstrip(";").strip()
     if not re.match(r"^(SELECT|WITH)\s", query, re.IGNORECASE) or ";" in query:
         return None
