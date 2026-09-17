@@ -37,7 +37,8 @@ def ingest_faq_data(path):
 
 
 def get_relevant_qa(query):
-    return get_collection().query(query_texts=[query], n_results=2)
+    # Le modèle d'embedding est faible en français : 4 entrées sur 11 laissent de la marge au LLM
+    return get_collection().query(query_texts=[query], n_results=4)
 
 
 def generate_answer(query, context):

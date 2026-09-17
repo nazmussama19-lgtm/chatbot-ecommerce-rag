@@ -20,7 +20,7 @@ Chaque message est classé dans une intention, puis traité par la chaîne corre
 
 | Intention | Exemple | Traitement |
 |---|---|---|
-| **faq** | *Quels moyens de paiement acceptez-vous ?* | Recherche des deux entrées de FAQ les plus proches dans ChromaDB, puis réponse du LLM à partir de ce contexte uniquement |
+| **faq** | *Quels moyens de paiement acceptez-vous ?* | Recherche des quatre entrées de FAQ les plus proches dans ChromaDB, puis réponse du LLM à partir de ce contexte uniquement |
 | **sql** | *Des Nike à moins de 50 € avec plus de 30 % de réduction* | Le LLM écrit une requête SQL, exécutée sur la base SQLite. Les produits s'affichent avec marque, prix, réduction, note et lien |
 | **chitchat** | *Bonsoir*, *Quel temps fait-il ?* | Réponse fixe qui rappelle ce que le bot sait faire |
 
@@ -32,6 +32,8 @@ Chaque message est classé dans une intention, puis traité par la chaîne corre
 
 Dernier filet de sécurité : si une question qui n'a rien à voir avec le catalogue arrive quand même dans la chaîne SQL (*Est-ce que je peux payer avec PayPal ?*), le LLM répond `NONE` au lieu d'écrire une requête, et la question repart vers la FAQ.
 
+**Quatre entrées de FAQ plutôt que deux.** Même faiblesse en français côté FAQ : avec les 2 entrées les plus proches, le bon contexte manquait pour 4 questions de test sur 17 (*Est-ce que je peux payer avec PayPal ?*). Avec 4 entrées, sur une FAQ de 11, toutes les questions reçoivent le bon contexte, et le LLM écarte ce qui ne sert pas.
+
 **Pas de PyTorch.** L'embedding tourne en ONNX via ChromaDB. L'installation reste légère : 6 dépendances, contre plusieurs Go avec `sentence-transformers`.
 
 **Le SQL généré est tenu en laisse.** La base est ouverte en lecture seule, seules les requêtes `SELECT` / `WITH` passent, et une requête invalide renvoie un message au lieu de faire planter l'appli.
@@ -42,7 +44,7 @@ Dernier filet de sécurité : si une question qui n'a rien à voir avec le catal
 
 - **Catalogue** : 903 produits récupérés sur [Flipkart](https://www.flipkart.com), site marchand indien, le 20 mai 2024. Seules des informations produit publiques ont été collectées (titre, marque, prix, réduction, note, nombre d'avis, lien), sans aucune donnée personnelle.
 - **Prix** : convertis de roupies en euros au taux de référence BCE du 20 mai 2024 (1 € = 90,4715 ₹), dans [`web-scraping/csv_to_sqlite.py`](web-scraping/csv_to_sqlite.py). Ils suivent le marché indien, d'où des montants bas (prix médian d'environ 15 €).
-- **FAQ** : 10 questions d'exemple, adaptées à une boutique française. Ce ne sont pas les conditions réelles de Flipkart.
+- **FAQ** : 11 questions d'exemple, adaptées à une boutique française. Ce ne sont pas les conditions réelles de Flipkart.
 
 Projet de démonstration personnel, sans but commercial et sans lien avec Flipkart. Les liens « Voir le produit » renvoient vers les fiches d'origine.
 

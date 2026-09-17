@@ -33,6 +33,7 @@ Make sure whenever you try to search for the brand name, the name can be in any 
 So, make sure to use %LIKE% to find the brand in condition. Never use "ILIKE".
 Create a single SQL query for the question provided.
 The question may be in French, but product titles and brands in the database are in English: translate keywords (e.g. "chaussures de course" -> "Running") before using them in LIKE conditions.
+When the question names a specific model (e.g. "Quest 4", "Pegasus 40", "Revolution 6"), also filter on the title with LIKE.
 The query should have all the fields in SELECT clause (i.e. SELECT *)
 Unless the question asks for a specific number of products, add LIMIT 10 to the query.
 If the question is not about products of the catalog (for example store policies, payment, delivery or returns), do not write a query: answer exactly <SQL>NONE</SQL>.
